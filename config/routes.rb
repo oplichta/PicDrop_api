@@ -1,8 +1,10 @@
 Rails.application.routes.draw do
-  devise_for :users, controllers: { sessions: 'users/sessions' }
+  devise_for :users, controllers: { sessions: 'users/sessions', omniauth_callbacks: "users/omniauth_callbacks"  }
   resources :photos
-  root to: "photos#index"
+  root to: "users#index"
+  resources :users
 
+  post '/upload' => 'photos#upload'
   # You can have the root of your site routed with "root"
   # root 'welcome#index'
 
