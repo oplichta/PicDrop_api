@@ -6,7 +6,8 @@ class User < ActiveRecord::Base
   validates_presence_of :email
   before_save :ensure_authentication_token
   has_many :authorizations
-
+  has_many :photos
+  
   def ensure_authentication_token
     if authentication_token.blank?
       self.authentication_token = generate_authentication_token
@@ -34,7 +35,7 @@ class User < ActiveRecord::Base
    end
    authorization.user
  end
- 
+
   private
 
     def generate_authentication_token

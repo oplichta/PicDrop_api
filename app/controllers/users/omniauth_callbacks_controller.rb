@@ -8,8 +8,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 		if user.persisted?
 			puts "You are in..!!! Go to edit profile to see the status for the accounts"
 			sign_in(user)
-      redirect_to 'http://127.0.0.1:4200/'
-      # ?auth_code='+request.env['omniauth.auth']['credentials']['token']
+      redirect_to 'http://127.0.0.1:4200/?auth_code='+request.env['omniauth.auth']['credentials']['token']
 		else
 			session["devise.user_attributes"] = user.attributes
 			redirect_to new_user_registration_url
