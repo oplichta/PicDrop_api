@@ -1,0 +1,19 @@
+development:
+  facebook_key: "1572255896381258"
+  facebook_secret: "785b6564e5404a607e71a12d2a90e625"
+
+  twitter_key: "wmrQH8XDlHHb5vzJnXNXckXLD"
+  twitter_secret: "Ct0TCXtayylU9iToJpH1lus5QyN4tEiIhmZy6S797J1DJjo6IK"
+
+  flickr_key: "fcd5d8dfee245259c28a4393c85231d4"
+  flickr_secret: "1e0a0da30d41d4bd"
+
+production:
+  facebook_key: "1572255896381258"
+  facebook_secret: "785b6564e5404a607e71a12d2a90e625"
+
+  twitter_key: "wmrQH8XDlHHb5vzJnXNXckXLD"
+  twitter_secret: "Ct0TCXtayylU9iToJpH1lus5QyN4tEiIhmZy6S797J1DJjo6IK"
+
+  flickr_key: "fcd5d8dfee245259c28a4393c85231d4"
+  flickr_secret: "1e0a0da30d41d4bd"
