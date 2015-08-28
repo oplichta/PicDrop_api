@@ -32,6 +32,21 @@ RSpec.configure do |config|
     :expires => true
   }
   })
+
+  OmniAuth.config.mock_auth[:flickr] = OmniAuth::AuthHash.new({
+    :provider => 'flickr',
+    :uid => '12345',
+    :info => {
+      :nickname => 'jbloggs',
+      :email => 'joe@bloggs.com',
+      :name => 'Joe Bloggs'
+    },
+  :credentials => {
+    :token => 'CAAWV9VozJ0oBACONujwJ1DeEKO2qFQ7Xg82VJJHHtZB82gLrq5ms9njPLsKmFV0AEfXM4OQlbgkhtcvK56DCsHtJrSVqMM5NHwMqvr5Cv3q7XOJnx5QXjpIFv5fJmIMp4oskIlKGvw6RZA6LBthfnsiR1lmDeBbL9PKWgkkt1Akl0sZAqiBOAHuVGKGQNVizxaPaZBkouAZDZD',
+    :expires_at => 1321747205,
+    :expires => true
+  }
+  })
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
   config.include Devise::TestHelpers, type: :controller
   config.include FactoryGirl::Syntax::Methods

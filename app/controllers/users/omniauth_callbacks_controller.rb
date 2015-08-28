@@ -1,26 +1,39 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   # You should configure your model like this:
   # devise :omniauthable, omniauth_providers: [:twitter]
-  skip_before_filter :authenticate_user!
-  
-  def all
-      @user = User.from_omniauth(request.env["omniauth.auth"],current_user)
+  skip_before_filter :verify_authenticity_token
+  before_filter :authenticate_user_from_token!
+  before_filter :authenticate_user!
 
-      if @user.persisted?
-        sign_in @user, :event => :authentication
-        set_flash_message(:notice, :success, :kind => "Facebook") if is_navigational_format?
-        puts "You are in "+ request.env['omniauth.auth']['provider']
-        redirect_to 'http://127.0.0.1:4200/?auth_code='+request.env['omniauth.auth']['credentials']['token']
+  def self.new_with_session(params,session)
+      if session["devise.user_attributes"]
+        new(session["devise.user_attributes"],without_protection: true) do |user|
+          user.attributes = params
+          user.valid?
+        end
       else
-        session["devise.facebook_data"] = request.env["omniauth.auth"]
-        redirect_to new_user_registration_url
+        super
       end
-  end
+    end
 
-	  def failure
-      puts "Auth failure"
-      super
-   end
+    def all
+        user = User.from_omniauth(request.env["omniauth.auth"],current_user)
+
+        if user.persisted?
+          sign_in user, :event => :authentication
+          set_flash_message(:notice, :success, :kind => "Facebook") if is_navigational_format?
+          puts "You are in "+ request.env['omniauth.auth']['provider']
+          redirect_to 'http://127.0.0.1:4200/?auth_code='+request.env['omniauth.auth']['credentials']['token']
+        else
+          session["devise.facebook_data"] = request.env["omniauth.auth"]
+          redirect_to new_user_registration_url
+        end
+    end
+
+  	  def failure
+        puts "Auth failure"
+        super
+     end
 
 
 	alias_method :facebook, :all
