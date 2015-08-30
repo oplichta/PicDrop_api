@@ -23,7 +23,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
           sign_in user, :event => :authentication
           set_flash_message(:notice, :success, :kind => "Facebook") if is_navigational_format?
           puts "You are in "+ request.env['omniauth.auth']['provider']
-          redirect_to 'http://127.0.0.1:4200/?auth_code='+request.env['omniauth.auth']['credentials']['token']
+          redirect_to 'https://picdropember.herokuapp.com/?auth_code='+request.env['omniauth.auth']['credentials']['token']
         else
           session["devise.facebook_data"] = request.env["omniauth.auth"]
           redirect_to new_user_registration_url
