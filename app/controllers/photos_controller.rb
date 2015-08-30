@@ -6,30 +6,34 @@ require 'omniauth'
 class PhotosController < ApplicationController
   before_action :set_photo, only: [:show, :update, :destroy]
   skip_before_filter :verify_authenticity_token
-  
+
   FlickRaw.api_key=ENV['FLICKR_KEY']
   FlickRaw.shared_secret=ENV['FLICKR_SECRET']
 
   def upload
     if current_user
-    #===FACEBOOK=====
-    puts 'uploading for user id'+ current_user.id.to_s
-    puts 'uploading for user email' +current_user.email.to_s
+      #===FACEBOOK=====
+      puts 'uploading for user id '+ current_user.id.to_s
+      puts 'uploading for user email ' +current_user.email.to_s
       if current_user.authorizations.find_by(provider: 'facebook')
-      token = current_user.authorizations.find_by(provider: 'facebook').token
-        @graph = Koala::Facebook::API.new(token)
-        @graph.put_picture(params[:file], params[:content_type],
-          { message: 'Photos uploaded by PicDrop :)' }, 'me')
+        token = current_user.authorizations.find_by(provider: 'facebook').token
+          @graph = Koala::Facebook::API.new(token)
+          @graph.put_picture(params[:file], params[:content_type],
+            { message: 'Photos uploaded by PicDrop :)' }, 'me')
+
+        #====FLICKR ====
+        @flickr = FlickRaw::Flickr.new
+        if current_user.authorizations.find_by(provider: 'flickr')
+          @flickr.access_token = current_user.authorizations.find_by(provider: 'flickr').token
+          @flickr.access_secret =current_user.authorizations.find_by(provider: 'flickr').secret
+          @flickr.upload_photo params[:file], :title => params[:filename],
+          description: 'Photos uploaded by PicDrop :)'
+        end
+        render json: params[:filename]
+      else
+        puts 'not fount authorizations'
+        render json: params[:filename], status: :unprocessable_entity
       end
-    #====FLICKR ====
-    @flickr = FlickRaw::Flickr.new
-    if current_user.authorizations.find_by(provider: 'flickr')
-      @flickr.access_token = current_user.authorizations.find_by(provider: 'flickr').token
-      @flickr.access_secret =current_user.authorizations.find_by(provider: 'flickr').secret
-      @flickr.upload_photo params[:file], :title => params[:filename],
-      description: 'Photos uploaded by PicDrop :)'
-    end
-    render json: params[:filename]
     end
   end
 
